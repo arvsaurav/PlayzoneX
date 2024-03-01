@@ -15,6 +15,7 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import authService from '../../services/AuthenticationService';
 import { useState } from 'react';
 import { Alert } from '@mui/material';
+import { NavLink } from 'react-router-dom';
 
 function Copyright(props) {
     return (
@@ -179,7 +180,7 @@ export default function Signup() {
                         </Button>
                         <Grid container justifyContent="flex-end">
                             <Grid item>
-                                <Link href="login" variant="body2">
+                                <Link component={NavLink} to="../login" variant="body2">
                                     Already have an account? Sign in
                                 </Link>
                             </Grid>
