@@ -65,6 +65,24 @@ export class AuthenticationService {
             }
         }
     }
+
+    async getCurrentUser() {
+        try {
+            return await this.account.get();
+        }
+        catch {
+            return null;
+        }
+    }
+
+    async logout(sessionId) {
+        try {
+            return await this.account.deleteSessions(sessionId);
+        }
+        catch {
+            return null;
+        }
+    }
 }
 
 const authService = new AuthenticationService();

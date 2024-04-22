@@ -8,6 +8,10 @@ import LandingPage from './components/LandingPage/LandingPage';
 import PageNotFound from './components/PageNotFound/PageNotFound';
 import App from './App';
 import About from './components/About/About';
+import { Provider } from 'react-redux';
+import store from './store/store';
+import Account from './components/Account/Account';
+import Logout from './components/Logout/Logout';
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -16,6 +20,8 @@ const router = createBrowserRouter(
       <Route path='about' element={<About />} />
       <Route path='login' element={<Login />} />
       <Route path='signup' element={<Signup />} />
+      <Route path='logout' element={<Logout />} />
+      <Route path='account' element={<Account />} />
     </Route>
   )
 );
@@ -23,6 +29,8 @@ const router = createBrowserRouter(
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <RouterProvider router={router} />
+    <Provider store={store}>
+      <RouterProvider router={router} />
+    </Provider>
   </React.StrictMode>
 );

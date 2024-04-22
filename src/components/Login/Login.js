@@ -15,7 +15,9 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import authService from '../../services/AuthenticationService';
 import { Alert } from '@mui/material';
 import { useState } from 'react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { login } from '../../features/authenticationSlice';
 
 function Copyright(props) {
     return (
@@ -38,6 +40,8 @@ export default function Login() {
     const [showAlert, setShowAlert] = useState(false);
     const [alertMessage, setAlertMessage] = useState('');
     const [alertMessageSeverity, setAlertMessageSeverity] = useState('');
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
 
     const isValidEmail = (email) => {
         // Regular expression for a simple email validation
@@ -78,6 +82,8 @@ export default function Login() {
             setShowAlert(true);
             setAlertMessage(message);
             setAlertMessageSeverity('success');
+            dispatch(login(userAccount));
+            navigate('/');
         }
     };
 
