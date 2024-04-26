@@ -12,25 +12,27 @@ import { Provider } from 'react-redux';
 import store from './store/store';
 import Account from './components/Account/Account';
 import Logout from './components/Logout/Logout';
+import Venues from './components/Venues/Venues';
 
 const router = createBrowserRouter(
-  createRoutesFromElements(
-    <Route path='/' element={<App />} errorElement={<PageNotFound />} >
-      <Route path='' element={<LandingPage />} />
-      <Route path='about' element={<About />} />
-      <Route path='login' element={<Login />} />
-      <Route path='signup' element={<Signup />} />
-      <Route path='logout' element={<Logout />} />
-      <Route path='account' element={<Account />} />
-    </Route>
-  )
+  	createRoutesFromElements(
+		<Route path='/' element={<App />} errorElement={<PageNotFound />} >
+			<Route path='' element={<LandingPage />} />
+			<Route path='about' element={<About />} />
+			<Route path='login' element={<Login />} />
+			<Route path='signup' element={<Signup />} />
+			<Route path='logout' element={<Logout />} />
+			<Route path='account' element={<Account />} />
+			<Route path='venues/:cityid' element={<Venues />} />
+		</Route>
+  	)
 );
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-  <React.StrictMode>
-    <Provider store={store}>
-      <RouterProvider router={router} />
-    </Provider>
-  </React.StrictMode>
+	<React.StrictMode>
+		<Provider store={store}>
+			<RouterProvider router={router} />
+		</Provider>
+	</React.StrictMode>
 );
