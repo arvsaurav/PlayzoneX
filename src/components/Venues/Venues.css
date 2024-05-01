@@ -1,0 +1,126 @@
+#venue-page-heading {
+    margin: 50px 75px 0 75px;
+    font-size: 32px;
+    font-weight: 800;
+    border-bottom: 1px solid black;
+    padding-bottom: 10px;
+    box-shadow: 0px 2px 1px -1px rgb(59, 58, 58);
+}
+
+#venue-page-grid-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    column-gap: 50px;
+    row-gap: 50px;
+    margin: 50px 75px 0 75px;
+}
+
+#venue-page-grid-container-venue-div {
+    background-color: rgb(242, 242, 242);
+    border-radius: 0.5rem;
+    height: 350px;
+    overflow: hidden;
+}
+
+#venue-page-grid-container-venue-div:hover {
+    cursor: pointer;
+    transform: scale(1.02);
+}
+
+#venue-page-grid-container-venue-div-image {
+    height: 70%;
+}
+
+#venue-page-grid-container-venue-div-image img {
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+}
+
+#venue-page-grid-container-venue-div div {
+    text-overflow: ellipsis; 
+    overflow: hidden; 
+    white-space: nowrap;
+}
+
+#venue-page-grid-container-venue-div-name {
+    height: 10%;
+    margin: 5px 10px 5px 10px;
+    height: fit-content;
+    font-size: 20px;
+    font-weight: 600;
+}
+
+#venue-page-grid-container-venue-div-landmark {
+    height: 10%;
+    margin: 5px 10px 5px 10px;
+    height: fit-content;
+    font-size: 18px;
+    font-weight: 400;
+}
+
+#venue-page-grid-container-venue-div-sports {
+    height: 10%;
+    margin: 5px 10px 5px 10px;
+    height: fit-content;
+    font-size: 18px;
+    font-weight: 400;
+    display: flex;
+    justify-content: flex-start;
+}
+
+#venue-page-grid-container-venue-div-sports div {
+    background-color: rgb(106, 106, 106);
+    margin-right: 10px;
+    border-radius: 0.3rem;
+    padding: 3px 8px 3px 8px;
+    color: white;
+}
+
+#venue-page-no-complexes-div {
+    margin: 50px 75px 0 75px;
+    font-size: 26px;
+    font-weight: 600;
+    background-color: rgb(242, 242, 242);
+    padding: 20px;
+    border-radius: 0.5rem;
+}
+
+@media only screen and (min-width: 2200px) {
+    #venue-page-grid-container {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr 1fr;
+    }
+}
+
+@media only screen and (max-width: 1300px) {
+    #venue-page-grid-container {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        row-gap: 25px;
+    }
+}
+
+@media only screen and (max-width: 880px) {
+    #venue-page-heading {
+        margin: 30px 20px 30px 20px;
+        font-size: 24px;
+        font-weight: 600;
+        min-width: 320px;
+    }
+
+    #venue-page-grid-container {
+        display: grid;
+        grid-template-columns: 1fr;
+        row-gap: 25px;
+        min-width: 320px;
+        margin: 30px 20px 30px 20px;
+    }
+
+    #venue-page-no-complexes-div {
+        margin: 30px 20px 30px 20px;
+        font-size: 18px;
+        font-weight: 400;
+        min-width: 280px;
+    }
+}

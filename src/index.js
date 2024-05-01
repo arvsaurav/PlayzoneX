@@ -13,6 +13,7 @@ import store from './store/store';
 import Account from './components/Account/Account';
 import Logout from './components/Logout/Logout';
 import Venues from './components/Venues/Venues';
+import Venue from './components/Venue/Venue';
 
 const router = createBrowserRouter(
   	createRoutesFromElements(
@@ -24,6 +25,7 @@ const router = createBrowserRouter(
 			<Route path='logout' element={<Logout />} />
 			<Route path='account' element={<Account />} />
 			<Route path='venues/:cityid' element={<Venues />} />
+			<Route path='venues/:cityid/:venueid' element={<Venue />} />
 		</Route>
   	)
 );

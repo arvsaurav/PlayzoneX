@@ -22,12 +22,12 @@ export class VenuesService {
                 ]
             )
             if(response.documents.length === 0) {
-                return {};
+                return [];
             }
             var venues = [];
             // only storing the requied data, skipping sensitive data
             for(var i = 0; i < response.documents.length; i++) {
-                const sports = response.documents[i].Sports.map((sport) => {
+                const sports = response.documents[i].sports.map((sport) => {
                     return (
                         {
                             'id': sport.$id,
@@ -35,11 +35,11 @@ export class VenuesService {
                         }
                     )
                 })
-                const amenities = response.documents[i].Amenities.map((amenity) => {
+                const amenities = response.documents[i].amenities.map((amenity) => {
                     return (
                         {
                             'id': amenity.$id,
-                            'amenity': amenity.Amenitiy 
+                            'amenity': amenity.Amenity 
                         }
                     )
                 })
@@ -76,7 +76,7 @@ export class VenuesService {
             if(response.documents.length === 0) {
                 return {};
             }
-            const sports = response.documents[0].Sports.map((sport) => {
+            const sports = response.documents[0].sports.map((sport) => {
                 return (
                     {
                         'id': sport.$id,
@@ -84,11 +84,11 @@ export class VenuesService {
                     }
                 )
             })
-            const amenities = response.documents[0].Amenities.map((amenity) => {
+            const amenities = response.documents[0].amenities.map((amenity) => {
                 return (
                     {
                         'id': amenity.$id,
-                        'amenity': amenity.Amenitiy 
+                        'amenity': amenity.Amenity 
                     }
                 )
             })
