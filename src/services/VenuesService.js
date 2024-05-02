@@ -74,7 +74,8 @@ export class VenuesService {
                 ]
             )
             if(response.documents.length === 0) {
-                return {};
+                // as length 0 is not expected in this scenario
+                return null;
             }
             const sports = response.documents[0].sports.map((sport) => {
                 return (
