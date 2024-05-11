@@ -4,8 +4,8 @@ const appwriteConfiguration = {
     appwriteDatabaseId: String(process.env.REACT_APP_DATABASE_ID),
     appwriteCitiesCollectionId: String(process.env.REACT_APP_CITIES_COLLECTION_ID),
     appwriteVenuesCollectionId: String(process.env.REACT_APP_VENUES_COLLECTION_ID),
-    appwriteSportsCollectionId: String(process.env.REACT_APP_SPORTS_COLLECTION_ID),
-    appwriteAmenitiesCollectionId: String(process.env.REACT_APP_AMENITIES_COLLECTION_ID)
+    appwriteBookingsCollectionId: String(process.env.REACT_APP_BOOKINGS_COLLECTION_ID),
+    appwritePricingCollectionId: String(process.env.REACT_APP_PRICING_COLLECTION_ID)
 }
 
 export default appwriteConfiguration;

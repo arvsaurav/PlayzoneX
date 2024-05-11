@@ -21,11 +21,8 @@ export class VenuesService {
                     Query.equal('City', cityId)
                 ]
             )
-            if(response.documents.length === 0) {
-                return [];
-            }
             var venues = [];
-            // only storing the requied data, skipping sensitive data
+            // only storing the requied data
             for(var i = 0; i < response.documents.length; i++) {
                 const sports = response.documents[i].sports.map((sport) => {
                     return (
@@ -105,6 +102,116 @@ export class VenuesService {
                 'amenities': amenities
             }
             return venue;
+        }
+        catch {
+            return null;
+        }
+    }
+
+    async getVenueNameAndLandmarkByVenueId(venueId) {
+            try {
+                const response = await this.database.listDocuments(
+                    configuration.appwriteDatabaseId,
+                    configuration.appwriteVenuesCollectionId,
+                    [
+                        Query.select(['Name', 'Landmark']),
+                        Query.equal('$id', venueId)
+                    ]
+                )
+                const venueNameAndLandmark = {
+                    'name': response.documents[0].Name,
+                    'landmark': response.documents[0].Landmark
+                }
+                return venueNameAndLandmark;
+            }
+            catch {
+                return null;
+            }
+    }
+
+    async getSportsByVenueId(venueId) {
+        try {
+            const response = await this.database.listDocuments(
+                configuration.appwriteDatabaseId,
+                configuration.appwriteVenuesCollectionId,
+                [
+                    Query.equal('$id', venueId)
+                ]
+            )
+            const sports = [];
+            response.documents[0].sports.forEach((sportArray) => {
+                sports.push({
+                    'id': sportArray.$id,
+                    'sport': sportArray.Sport
+                })
+            })
+            return sports;
+        }
+        catch {
+            return null;
+        }
+    }
+
+    // get all slots of a particular venue
+    async getSlotsByVenueId(venueId) {
+        try {
+            const response = await this.database.listDocuments(
+                configuration.appwriteDatabaseId,
+                configuration.appwriteVenuesCollectionId,
+                [
+                    Query.equal('$id', venueId)
+                ]
+            )
+            const slots = [];
+            response.documents[0].slots.forEach((slotArray) => {
+                slots.push({
+                    'id': slotArray.$id,
+                    'slot': slotArray.Slot
+                })
+            })
+            return slots;
+        }
+        catch {
+            return null;
+        }
+    }
+
+     // get list of unbooked slots of a particular venue, for a particular sport, on a particular date
+    async getAvailableSlots(venueId, sport, date) {
+        try {
+            // get booked slots
+            const response1 = await this.database.listDocuments(
+                configuration.appwriteDatabaseId,
+                configuration.appwriteBookingsCollectionId,
+                [
+                    Query.select(['Slots']),
+                    Query.equal('Venue-Id', venueId),
+                    Query.equal('Sport', sport),
+                    Query.equal('Date', date),
+                    Query.equal('isActive', true)
+                ]
+            )
+            const bookedSlots = new Map();
+            response1.documents.forEach((slotObj) => {
+                slotObj.Slots.forEach((slot) => {
+                    if(!bookedSlots.has(slot)) {
+                        bookedSlots.set(slot, true)
+                    }
+                })
+            })
+            // get all slots
+            const response2 = await this.getSlotsByVenueId(venueId);
+            // availableSlots = allSlots - bookedSlots
+            const availableSlots = [];
+            response2.forEach((slotArray) => {
+                if(!bookedSlots.has(slotArray.id)) {
+                    availableSlots.push({
+                        'id': slotArray.id,
+                        'slot': slotArray.slot
+                    })
+                }
+            })
+            return availableSlots;
         }
         catch {
             return null;

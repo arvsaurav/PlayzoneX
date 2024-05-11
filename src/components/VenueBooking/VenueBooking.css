@@ -1,0 +1,177 @@
+html {
+    scroll-behavior: smooth;
+}
+
+#venue-booking-page-parent-div, #venue-booking-page-amount-confirmation-window {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 40%;
+    min-width: 320px;
+    max-width: 800px;
+    margin: auto;
+    margin-top: 100px;
+    box-shadow: rgba(14, 30, 37, 0.12) 0px 2px 4px 0px, rgba(14, 30, 37, 0.32) 0px 2px 16px 0px;
+    border-radius: 0.25rem;
+    margin-bottom: 50px;
+}
+
+#venue-booking-page-heading-section {
+    margin-bottom: 25px;
+    margin-right: auto;
+    width: 100%;
+    border-bottom: 1px solid rgb(187, 187, 187);
+}
+
+#venue-booking-page-heading-section-venue-name {
+    font-size: 20px;
+    font-weight: 600;
+    padding: 10px 10px 5px 10px;
+}
+
+#venue-booking-page-heading-section-venue-landmark{
+    font-size: 16px;
+    padding: 0px 10px 10px 10px;
+}
+
+#venue-booking-page-sports-section, #venue-booking-page-date-section, #venue-booking-page-slots-section {
+    width: 90%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 25px;
+}
+
+#venue-booking-page-slots-section div:nth-child(2) {
+    width: 300px;
+    min-width: 120px;
+    border: 1px solid rgb(187, 187, 187);
+    border-radius: 0.25rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    padding: 5px 0 5px 0;
+}
+
+#venue-booking-page-slots-section div:nth-child(2):hover {
+    border: 1px solid black;
+}
+
+#venue-booking-page-slots-section div:nth-child(2) button {
+    padding: 8px;
+    margin: 5px;
+    font-size: 14px;
+    border: 1px solid gray;
+    border-radius: 0.5rem;
+}
+
+#venue-booking-page-slots-section div:nth-child(2) button:hover {
+    cursor: pointer;
+    border: 1px solid black;
+}
+
+#venue-booking-page-confirm-booking-div {
+    margin-bottom: 25px;
+}
+
+#venue-booking-page-confirm-booking-div button, #proceed-payment-button {
+    padding: 10px 15px 10px 15px;
+    font-size: 24px;
+    font-weight: 600;
+    width: 100%;
+    border-radius: 0.5rem;
+    border: none;
+    background-color: #27924C;
+    color: white;
+}   
+
+#venue-booking-page-confirm-booking-div button:hover, #proceed-payment-button:hover {
+    cursor: pointer;
+    transform: scale(1.05);
+}
+
+#amount-confirmation-window-venue-name-section, #amount-confirmation-window-sport-section, #amount-confirmation-window-date-section, #amount-confirmation-window-slots-section, #amount-confirmation-window-amount-section {
+    width: 80%;
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    align-items: center;
+    margin-top: 25px;
+}
+
+#amount-confirmation-window-venue-name-section div:nth-child(2), #amount-confirmation-window-sport-section div:nth-child(2), #amount-confirmation-window-date-section div:nth-child(2), #amount-confirmation-window-slots-section div:nth-child(2), #amount-confirmation-window-amount-section div:nth-child(2) {
+    border: 1px solid gray;
+    border-radius: 0.2rem;
+    padding: 5px;
+}
+
+#amount-confirmation-window-venue-name-section div:nth-child(2), #amount-confirmation-window-sport-section div:nth-child(2) {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+#amount-confirmation-window-slots-section-parent-box {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    justify-content: center;
+}
+
+#amount-confirmation-window-slots-section-slots {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 5px;
+    margin: 5px;
+    border: 1px solid gray;
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 5px 0px, rgba(0, 0, 0, 0.1) 0px 0px 1px 0px;
+    border-radius: 0.2rem;
+}
+
+#amount-confirmation-window-proceed-payment-section {
+    margin: 25px 0 25px 0;
+}
+
+@media only screen and (max-width: 1100px) {
+    #venue-booking-page-parent-div, #venue-booking-page-amount-confirmation-window {
+        margin-top: 50px;
+        width: 50%;
+    }
+}
+
+@media only screen and (max-width: 880px) {
+    #venue-booking-page-parent-div, #venue-booking-page-amount-confirmation-window {
+        margin-top: 50px;
+        width: 70%;
+    }
+
+    #amount-confirmation-window-slots-section-parent-box {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media only screen and (max-width: 600px) {
+    #venue-booking-page-parent-div, #venue-booking-page-amount-confirmation-window {
+        margin-top: 50px;
+        width: 90%;
+    }
+
+    #venue-booking-page-sports-section, #venue-booking-page-date-section, #venue-booking-page-slots-section {
+        margin-bottom: 15px;
+    }
+
+    #amount-confirmation-window-sport-section, #amount-confirmation-window-date-section, #amount-confirmation-window-slots-section, #amount-confirmation-window-amount-section {
+        margin-top: 15px;
+    }
+
+    #amount-confirmation-window-proceed-payment-section {
+        margin: 15px 0 25px 0;
+    }
+
+    #venue-booking-page-sports-section-div1, #venue-booking-page-date-section div:nth-child(1), #venue-booking-page-slots-section div:nth-child(1) {
+        width: 80px;
+    }
+}
