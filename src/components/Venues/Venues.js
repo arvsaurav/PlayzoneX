@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom';
 import venuesService from '../../services/VenuesService';
 import './Venues.css';
-import { Alert } from '@mui/material';
+import { Alert, Box, LinearProgress } from '@mui/material';
 
 function Venues() {
 
@@ -10,9 +10,11 @@ function Venues() {
 	const [venues, setVenues] = useState([]);
 	const [isFetched, setIsFetched] = useState(false);
 	const [showAlert, setShowAlert] = useState(false);
+	const [isLoading, setIsLoading] = useState(true);
 	const navigate = useNavigate();
 
 	const venuesList = async (cityId) => {
+		setIsLoading(true);
 		const response = await venuesService.getAllVenuesOfCity(cityId);
 		if(response !== null) {
 			setVenues(response);
@@ -21,6 +23,7 @@ function Venues() {
 		else {
 			setShowAlert(true);
 		}
+		setIsLoading(false);
 	}
 
 	useEffect(() => {
@@ -33,6 +36,12 @@ function Venues() {
 
   	return (
 		<>
+			{
+				isLoading && 
+				<Box sx={{width: '100%', minWidth: '350px'}}>
+					<LinearProgress />
+				</Box>
+			}
 			{
                 showAlert && <Alert sx={{mt: 1, minWidth: '320px'}} severity='error'> Something went wrong. </Alert>
             }
@@ -48,6 +57,7 @@ function Venues() {
 					:
 					<div id='venue-page-grid-container'>
 						{
+							!isLoading &&
 							venues.map((venue, key) => {
 								return (
 									<div id='venue-page-grid-container-venue-div' key={key} onClick={() => openSelectedVenue(venue['id'])}>

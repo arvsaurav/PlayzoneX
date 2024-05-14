@@ -15,9 +15,18 @@ export class AuthenticationService {
     async createAccount({name, email, password}) {
         try {
             const userAccount = await this.account.create(ID.unique(), email, password, name);
-            return {
-                userAccount,
-                message: 'Account created successfully.'
+            if(userAccount) {
+                const loggedinUserAccount = await this.login({email, password});
+                return {
+                    loggedinUserAccount,
+                    message: 'Account created successfully. Logging you in...'
+                }
+            }
+            else {
+                return {
+                    userAccount,
+                    message: 'Account created successfully.'
+                }
             }
         }
         catch(error) {
@@ -38,7 +47,7 @@ export class AuthenticationService {
 
     async login({email, password}) {
         try {
-            const userAccount = await this.account.createEmailPasswordSession(email, password);
+            const userAccount = await this.account.createEmailSession(email, password);
             return {
                 userAccount: userAccount,
                 message: 'Login successful.'

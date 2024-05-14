@@ -14,8 +14,10 @@ import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import authService from '../../services/AuthenticationService';
 import { useState } from 'react';
-import { Alert } from '@mui/material';
-import { NavLink } from 'react-router-dom';
+import { Alert, Backdrop, CircularProgress } from '@mui/material';
+import { NavLink, useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { login } from '../../features/authenticationSlice';
 
 function Copyright(props) {
     return (
@@ -38,6 +40,14 @@ export default function Signup() {
     const [showAlert, setShowAlert] = useState(false);
     const [alertMessage, setAlertMessage] = useState('');
     const [alertMessageSeverity, setAlertMessageSeverity] = useState('');
+    const [showBackdrop, setShowBackdrop] = useState(false);
+    const [firstName, setFirstName] = useState('');
+    const [lastName, setLastName] = useState('');
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
 
     const isValidEmail = (email) => {
         // Regular expression for a simple email validation
@@ -47,16 +57,17 @@ export default function Signup() {
 
     const handleSubmit = async (event) => {
         event.preventDefault();
-        const data = new FormData(event.currentTarget);
-        const name = data.get('firstName') + ' ' + data.get('lastName');
-        const email = data.get('email');
-        const password = data.get('password');
-        const confirmPassword = data.get('confirmPassword');
         // validate email format
         if(!isValidEmail(email)) {
             setShowAlert(true);
             setAlertMessage('Invalid email address.');
             setAlertMessageSeverity('warning');
+            setTimeout(() => {
+                setShowAlert(false);
+            }, 3000);
+            setEmail('');
+            setPassword('');
+            setConfirmPassword('');
             return;
         }
         // validate password length
@@ -64,20 +75,33 @@ export default function Signup() {
             setShowAlert(true);
             setAlertMessage('Password must be at least 8 characters.');
             setAlertMessageSeverity('warning');
+            setTimeout(() => {
+                setShowAlert(false);
+            }, 3000);
+            setPassword('');
+            setConfirmPassword('');
             return;
         }
         if(password !== confirmPassword) {
             setShowAlert(true);
             setAlertMessage('Password mismatch.');
             setAlertMessageSeverity('warning');
+            setTimeout(() => {
+                setShowAlert(false);
+            }, 3000);
+            setPassword('');
+            setConfirmPassword('');
             return;
         }
+        const name = firstName + ' ' + lastName;
         const user = {
             name,
             email,
             password
         }
+        setShowBackdrop(true);
         const { userAccount, message } = await authService.createAccount(user);
+        setShowBackdrop(false);
         if(userAccount === null) {
             setShowAlert(true);
             setAlertMessage(message);
@@ -87,13 +111,31 @@ export default function Signup() {
             setShowAlert(true);
             setAlertMessage(message);
             setAlertMessageSeverity('success');
+            setTimeout(() => {
+                dispatch(login(userAccount));
+                navigate('/');
+            }, 3000);
         }
+        setTimeout(() => {
+            setShowAlert(false);
+        }, 3000);
+        setFirstName('');
+        setLastName('');
+        setEmail('');
+        setPassword('');
+        setConfirmPassword('');
     };
 
     return (
         <ThemeProvider theme={defaultTheme}>
+            <Backdrop
+                sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+                open={showBackdrop}
+            >
+                <CircularProgress color='inherit' />
+            </Backdrop>
             <Container component="main" maxWidth="xs">
-                { {showAlert} && <Alert sx={{mt: 1}} severity={alertMessageSeverity}> {alertMessage} </Alert>}
+                { showAlert && <Alert sx={{mt: 1, position: 'sticky', top: '105px', zIndex: '100'}} severity={alertMessageSeverity}> {alertMessage} </Alert> }
                 <CssBaseline />
                 <Box
                     sx={{
@@ -120,6 +162,8 @@ export default function Signup() {
                                     id="firstName"
                                     label="First Name"
                                     autoFocus
+                                    value={firstName}
+                                    onChange={(event) => setFirstName(event.target.value)}
                                 />
                             </Grid>
                             <Grid item xs={12} sm={6}>
@@ -129,6 +173,8 @@ export default function Signup() {
                                     label="Last Name"
                                     name="lastName"
                                     autoComplete="family-name"
+                                    value={lastName}
+                                    onChange={(event) => setLastName(event.target.value)}
                                 />
                             </Grid>
                             <Grid item xs={12}>
@@ -139,6 +185,8 @@ export default function Signup() {
                                     label="Email Address"
                                     name="email"
                                     autoComplete="email"
+                                    value={email}
+                                    onChange={(event) => setEmail(event.target.value)}
                                 />
                             </Grid>
                             <Grid item xs={12}>
@@ -150,6 +198,8 @@ export default function Signup() {
                                     type="password"
                                     id="password"
                                     autoComplete="new-password"
+                                    value={password}
+                                    onChange={(event) => setPassword(event.target.value)}
                                 />
                             </Grid>
                             <Grid item xs={12}>
@@ -161,6 +211,8 @@ export default function Signup() {
                                     type="password"
                                     id="confirmPassword"
                                     autoComplete="new-password"
+                                    value={confirmPassword}
+                                    onChange={(event) => setConfirmPassword(event.target.value)}
                                 />
                             </Grid>
                             <Grid item xs={12} >

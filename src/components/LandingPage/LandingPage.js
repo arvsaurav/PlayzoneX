@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import './LandingPage.css';
-import { Alert, Box, FormControl, InputLabel, MenuItem, Select } from '@mui/material';
+import { Alert, Box, FormControl, InputLabel, LinearProgress, MenuItem, Select, Skeleton } from '@mui/material';
 import citiesService from '../../services/CitiesService';
 import { useNavigate } from 'react-router-dom';
 
@@ -10,9 +10,11 @@ function LandingPage() {
     const [cities, setCities] = useState([]);
     const [popularCities, setPopularCities] = useState([]);
     const [showAlert, setShowAlert] = useState(false);
+    const [isLoading, setIsLoading] = useState(true);
     const navigate = useNavigate();
 
     const getCities = async () => {
+        setIsLoading(true);
         const response = await citiesService.getAllCities();
         if(response !== null) {
             response.sort((city1, city2) => (city1.City > city2.City) ? 1 : ((city2.City > city1.City) ? -1 : 0));
@@ -27,6 +29,7 @@ function LandingPage() {
         else {
             setShowAlert(true);
         }
+        setIsLoading(false);
     }
 
     useEffect(() => {
@@ -45,6 +48,12 @@ function LandingPage() {
 
     return (
         <>
+            {
+                isLoading && 
+                <Box sx={{width: '100%', minWidth: '350px'}}>
+                    <LinearProgress />
+                </Box>
+            }
             {
                 showAlert && <Alert sx={{mt: 1, minWidth: '320px'}} severity='error'> Something went wrong. </Alert>
             }
@@ -76,6 +85,14 @@ function LandingPage() {
                     </div>
                     <div id='landing-page-popular-city-div-cities'>
                         {
+                            isLoading && 
+                            <Box sx={{width: '100%'}}>
+                                <Skeleton animation='wave' />
+                                <Skeleton animation={false} />
+                            </Box>
+                        }
+                        {
+                            !isLoading && 
                             popularCities.map((city, key) => {
                                 return (
                                     <button key={key} onClick={() => handleButtonClick(city.$id)}>{city.City}</button>

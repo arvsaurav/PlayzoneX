@@ -20,8 +20,7 @@
     font-size: 24px;
     font-weight: 400;
     padding: 5px 8px 5px 8px;
-    border-radius: 0.5rem;
-    box-shadow: 1px 1px 1px rgb(179, 179, 179);
+    box-shadow: rgba(17, 17, 26, 0.1) 0px 1px 0px;
 }
 
 #venue-page-header-div-child2 {
@@ -91,7 +90,7 @@
 #venue-page-venue-sports div div, #venue-page-venue-amenities div div {
     padding: 5px 8px 5px 8px;
     border-radius: 0.5rem;
-    box-shadow: 2px 2px 2px rgb(179, 179, 179);
+    box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;
 }
 
 @media only screen and (max-width: 880px) {

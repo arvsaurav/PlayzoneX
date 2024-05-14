@@ -41,7 +41,7 @@ function VenueBooking() {
     const [confirmBookingValidationFailedMessage, setConfirmBookingValidationFailedMessage] = useState('');
     const [bookingDetails, setBookingDetails] = useState('');
     const [showAmountWindow, setShowAmountWindow] = useState(false);
-    const [showBackdrop, setShowBackDrop] = useState(false);
+    const [showBackdrop, setShowBackdrop] = useState(false);
 
     const handleSportChange = (event) => {
         setSport(event.target.value);
@@ -135,9 +135,9 @@ function VenueBooking() {
             document.getElementById(event.target.id).style.transform = 'scale(1.05)';
             document.getElementById(event.target.id).style.cursor = 'not-allowed';
             const sportNameArray = allSports.filter((sportArray) => sportArray.id === sport);
-            setShowBackDrop(true);
+            setShowBackdrop(true);
             const response = await pricingService.getPrice(venueid, sport, selectedSlots.length);
-            setShowBackDrop(false);
+            setShowBackdrop(false);
             if(response === null) {
                 setIsConfirmBookingValidationFailed(true);
                 setConfirmBookingValidationFailedMessage('Something went wrong. Please retry your booking.');
@@ -210,17 +210,17 @@ function VenueBooking() {
     return (
         <>
             {
-                isLoading && <LinearProgress />
-            }
-            {
-                showBackdrop &&
-                <Backdrop
-                    sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
-                    open={showBackdrop}
-                >
-                    <CircularProgress color="inherit" />
-                </Backdrop>
-            }
+                isLoading &&
+                <Box sx={{width: '100%', minWidth: '350px'}}>
+                    <LinearProgress />
+                </Box>
+            }  
+            <Backdrop
+                sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+                open={showBackdrop}
+            >
+                <CircularProgress color='inherit' />
+            </Backdrop>
             {
                 apiError && <Alert severity="error">Something went wrong.</Alert>
             }
@@ -228,7 +228,7 @@ function VenueBooking() {
                 <div id='venue-booking-page-heading-section'>
                     {
                         isNameLoading && 
-                        <Box>
+                        <Box sx={{marginLeft: '5px', marginRight: '5px'}}>
                             <Skeleton />
                             <Skeleton animation="wave" />
                         </Box>

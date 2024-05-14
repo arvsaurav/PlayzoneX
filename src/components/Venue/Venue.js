@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import venuesService from '../../services/VenuesService';
-import { Alert } from '@mui/material';
+import { Alert, Box, LinearProgress } from '@mui/material';
 import './Venue.css';
 
 function Venue() {
@@ -9,9 +9,11 @@ function Venue() {
 	const { cityid, venueid } = useParams();
 	const [venue, setVenue] = useState([]);
 	const [showAlert, setShowAlert] = useState(false);
+	const [isLoading, setIsLoading] = useState(true);
 	const navigate = useNavigate();
 
 	const getVenue = async (cityId, venueId) => {
+		setIsLoading(true);
 		const response = await venuesService.getVenueOfCityByVenueId(cityId, venueId);
 		if(response !== null) {
 			setVenue(response);
@@ -19,6 +21,7 @@ function Venue() {
 		else {
 			setShowAlert(true);
 		}
+		setIsLoading(false);
 	}
 
 	useEffect(() => {
@@ -31,6 +34,12 @@ function Venue() {
 	
   	return (
     	<>
+			{
+				isLoading &&
+				<Box sx={{width: '100%', minWidth: '350px'}}>
+					<LinearProgress />
+				</Box>
+			}
 			{
                 showAlert && <Alert sx={{mt: 1, minWidth: '320px'}} severity='error'> Something went wrong. </Alert>
             }
