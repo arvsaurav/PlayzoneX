@@ -93,10 +93,8 @@ export default function Login() {
             setShowAlert(true);
             setAlertMessage(message);
             setAlertMessageSeverity('success');
-            setTimeout(() => {
-                dispatch(login(userAccount));
-                navigate('/');
-            }, 1000);
+            dispatch(login(userAccount));
+            navigate('/');
         }
         setEmail('');
         setPassword('');
