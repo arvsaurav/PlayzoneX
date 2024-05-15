@@ -175,48 +175,6 @@ export class VenuesService {
             return null;
         }
     }
-
-     // get list of unbooked slots of a particular venue, for a particular sport, on a particular date
-    async getAvailableSlots(venueId, sport, date) {
-        try {
-            // get booked slots
-            const response1 = await this.database.listDocuments(
-                configuration.appwriteDatabaseId,
-                configuration.appwriteBookingsCollectionId,
-                [
-                    Query.select(['Slots']),
-                    Query.equal('Venue-Id', venueId),
-                    Query.equal('Sport', sport),
-                    Query.equal('Date', date),
-                    Query.equal('isActive', true)
-                ]
-            )
-            const bookedSlots = new Map();
-            response1.documents.forEach((slotObj) => {
-                slotObj.Slots.forEach((slot) => {
-                    if(!bookedSlots.has(slot)) {
-                        bookedSlots.set(slot, true)
-                    }
-                })
-            })
-            // get all slots
-            const response2 = await this.getSlotsByVenueId(venueId);
-            // availableSlots = allSlots - bookedSlots
-            const availableSlots = [];
-            response2.forEach((slotArray) => {
-                if(!bookedSlots.has(slotArray.id)) {
-                    availableSlots.push({
-                        'id': slotArray.id,
-                        'slot': slotArray.slot
-                    })
-                }
-            })
-            return availableSlots;
-        }
-        catch {
-            return null;
-        }
-    }
 }
 
 const venuesService = new VenuesService();

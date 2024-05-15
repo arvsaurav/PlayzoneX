@@ -1,34 +1,21 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import venuesService from '../../services/VenuesService';
+import bookingService from '../../services/BookingService';
+import pricingService from '../../services/PricingService';
 import { Alert, Backdrop, Box, CircularProgress, FormControl, InputLabel, LinearProgress, MenuItem, Select, Skeleton } from '@mui/material';
 import dayjs from 'dayjs';
+import 'dayjs/locale/en-gb';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import './VenueBooking.css';
-import pricingService from '../../services/PricingService';
 
 function VenueBooking() {
-
     const { venueid } = useParams();
     const [venueName, setVenueName] = useState('');
     const [venueLandmark, setVenueLandmark] = useState('');
     const [sport, setSport] = useState('');
     const [date, setDate] = useState(dayjs().add(1, 'day'));
-    const [dateString, setDateString] = useState(() => {
-        const initialDate = dayjs().add(1, 'day');
-        var dd = initialDate.$D;
-        if(dd < 10) {
-            dd = '0' + dd;
-        }
-        var mm = initialDate.$M + 1;
-        if(mm < 10) {
-            mm = '0' + mm; 
-        }
-        var yyyy = initialDate.$y;
-        const dateStr = yyyy + '-' + mm + '-' + dd;
-        return dateStr;
-    });
     const [availableSlots, setAvailableSlots] = useState([]);
     const [selectedSlots, setSelectedSlots] = useState([]);
     const [allSports, setAllSports] = useState([]);
@@ -49,18 +36,7 @@ function VenueBooking() {
     }
 
     const handleDateChange = (newValue) => {
-        var dd = newValue.$D;
-        if(dd < 10) {
-            dd = '0' + dd;
-        }
-        var mm = newValue.$M + 1;
-        if(mm < 10) {
-            mm = '0' + mm; 
-        }
-        var yyyy = newValue.$y;
-        const dateStr = yyyy + '-' + mm + '-' + dd;
-        setDateString(dateStr);
-        setDate(dayjs(dateStr));
+        setDate(newValue);
         setSelectedSlots([]);
     }
 
@@ -148,7 +124,7 @@ function VenueBooking() {
                 'venueName': venueName,
                 'sport': sport,
                 'sportName': sportNameArray[0].sport,
-                'date': dateString,
+                'date': date.format('DD-MM-YYYY'),
                 'slots': selectedSlots,
                 'amount': response
             }
@@ -163,6 +139,7 @@ function VenueBooking() {
     const handleProceedPaymentButton = () => {
         // authenticate user and then proceed for payment
         console.log('proceed payment button clicked.');
+        console.log(bookingDetails);
     }
 
     useEffect(() => {
@@ -194,7 +171,7 @@ function VenueBooking() {
     useEffect(() => {
         const getAvailableSlots = async () => {
             setIsSlotLoading(true);
-            const response = await venuesService.getAvailableSlots(venueid, sport, dateString);
+            const response = await bookingService.getAvailableSlots(venueid, sport, date.format('DD-MM-YYYY'));
             if(response !== null) {
                 setAvailableSlots(response);
                 setIsSlotLoading(false);
@@ -205,7 +182,7 @@ function VenueBooking() {
             setIsLoading(false);
         }
         getAvailableSlots();
-    }, [venueid, sport, date, dateString]);
+    }, [venueid, sport, date]);
 
     return (
         <>
@@ -264,7 +241,7 @@ function VenueBooking() {
                 </div>
                 <div id='venue-booking-page-date-section'>
                     <div>Date</div>
-                    <LocalizationProvider dateAdapter={AdapterDayjs}>
+                    <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="en-gb">
                         <DatePicker
                             sx={{ minWidth: 180, width: 300 }}
                             label="Date"
@@ -324,7 +301,7 @@ function VenueBooking() {
                         <div>{bookingDetails.sportName}</div>
                     </div>
                     <div id='amount-confirmation-window-date-section'>
-                        <div>Date <p style={{fontSize: '12px'}}>(yyyy-mm-dd)</p></div>
+                        <div>Date <p style={{fontSize: '12px'}}>(dd-mm-yyyy)</p></div>
                         <div>{bookingDetails.date}</div>
                     </div>
                     <div id='amount-confirmation-window-slots-section'>
