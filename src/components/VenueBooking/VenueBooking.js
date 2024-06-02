@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import venuesService from '../../services/VenuesService';
 import bookingService from '../../services/BookingService';
 import pricingService from '../../services/PricingService';
@@ -9,6 +9,7 @@ import 'dayjs/locale/en-gb';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import './VenueBooking.css';
+import { StripeCheckoutWrapper } from '../StripeCheckout/StripeCheckout';
 
 function VenueBooking() {
     const { venueid } = useParams();
@@ -29,6 +30,7 @@ function VenueBooking() {
     const [bookingDetails, setBookingDetails] = useState('');
     const [showAmountWindow, setShowAmountWindow] = useState(false);
     const [showBackdrop, setShowBackdrop] = useState(false);
+    const navigate = useNavigate();
 
     const handleSportChange = (event) => {
         setSport(event.target.value);
@@ -140,6 +142,10 @@ function VenueBooking() {
         // authenticate user and then proceed for payment
         console.log('proceed payment button clicked.');
         console.log(bookingDetails);
+        // test stripe flow
+        
+        navigate('/payment');
+        
     }
 
     useEffect(() => {

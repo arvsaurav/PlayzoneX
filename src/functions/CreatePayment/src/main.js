@@ -1,33 +1,75 @@
-import { Client } from 'node-appwrite';
+import appwriteConfiguration from '../../../configuration/AppwriteConfiguration';
+import Stripe from 'stripe';
+import stripeConfiguration from '../../../configuration/stripeConfiguration';
+import { Client } from 'appwrite';
 
 // This is your Appwrite function
 // It's executed each time we get a request
 export default async ({ req, res, log, error }) => {
-  // Why not try the Appwrite SDK?
-  //
-  // const client = new Client()
-  //    .setEndpoint('https://cloud.appwrite.io/v1')
-  //    .setProject(process.env.APPWRITE_FUNCTION_PROJECT_ID)
-  //    .setKey(process.env.APPWRITE_API_KEY);
 
-  // You can log messages to the console
-  log('Hello, Logs!');
+    // Prepate data
+    const payload = JSON.parse(req.payload)
+    console.log("create")
+    console.log(payload)
+    const stripe = new Stripe(stripeConfiguration.stripeKey)
 
-  // If something goes wrong, log an error
-  error('Hello, Errors!');
+    const client = new Client()
+        .setEndpoint('https://6658c497b201f0f3fdbd.appwrite.global/')
+        .setProject(appwriteConfiguration.appwriteProjectId)
+        .setKey(appwriteConfiguration.appwriteFunctionCreatePaymentApiKey)
+        .setSelfSigned(true);
 
-  // The `req` object contains the request data
-  if (req.method === 'GET') {
-    // Send a response with the res object helpers
-    // `res.send()` dispatches a string back to the client
-    return res.send('Hello, World!');
-  }
+    const amount = 1000; //req.payload.amount;
+    const currency = 'usd'; //req.payload.currency || 'usd';
 
-  // `res.json()` is a handy helper for sending JSON
-  return res.json({
-    motto: 'Build like a team of hundreds_',
-    learn: 'https://appwrite.io/docs',
-    connect: 'https://appwrite.io/discord',
-    getInspired: 'https://builtwith.appwrite.io',
-  });
-};
+    try {
+        const paymentIntent = await stripe.paymentIntents.create({
+            amount: amount,
+            currency: currency,
+        });
+        res.json({
+            clientSecret: paymentIntent.client_secret,
+        });
+    } catch (error) {
+        res.json({
+            error: error.message,
+        });
+    }
+
+
+
+
+
+/*
+    // Create Stripe payment
+    const session = await stripeClient.checkout.sessions.create({
+        line_items: [
+          {
+            price_data: {
+              currency: 'eur',
+              product_data: {
+                name: 'test name',
+                description: 'test des',
+              },
+              unit_amount: 100,
+            },
+            quantity: 1,
+          },
+        ],
+        mode: 'payment',
+        success_url: payload.redirectSuccess,
+        cancel_url: payload.redirectFailed,
+        payment_intent_data: {
+          metadata: {
+            userId: 'test user',
+            packageId: 12345,
+          },
+        },
+    })
+
+    // Return redirect URL
+    res.json({
+        paymentUrl: session.url,
+    })
+    */
+}

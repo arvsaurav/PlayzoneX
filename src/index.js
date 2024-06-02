@@ -14,6 +14,7 @@ import Account from './components/Account/Account';
 import Venues from './components/Venues/Venues';
 import Venue from './components/Venue/Venue';
 import VenueBooking from './components/VenueBooking/VenueBooking';
+import StripeCheckoutWrapper from './components/StripeCheckout/StripeCheckout';
 
 const router = createBrowserRouter(
   	createRoutesFromElements(
@@ -26,6 +27,7 @@ const router = createBrowserRouter(
 			<Route path='venues/:cityid' element={<Venues />} />
 			<Route path='venues/:cityid/:venueid' element={<Venue />} />
 			<Route path='booking/:venueid' element={<VenueBooking />} />
+			<Route path='payment' element={<StripeCheckoutWrapper />} />
 		</Route>
   	)
 );
