@@ -1,5 +1,5 @@
 import { Client } from 'node-appwrite';
-import appwriteConfiguration from '../../../configuration/AppwriteConfiguration';
+import appwriteConfiguration from '../../../configuration/appwriteConfiguration';
 import stripeConfiguration from '../../../configuration/stripeConfiguration';
 import Stripe from 'stripe';
 import { Databases } from 'appwrite';
@@ -24,12 +24,13 @@ export default async ({ req, res, log, error }) => {
 
     let event;
 
-    try {
+    //try {
         event = stripe.webhooks.constructEvent(payload, sig, stripeConfiguration.stripeSignature);
-    } catch (err) {
+    /*} catch (err) {
         res.status(400).send(`Webhook Error: ${err.message}`);
         return;
     }
+    */
 
     // Handle the event
     switch (event.type) {

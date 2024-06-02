@@ -1,4 +1,4 @@
-import appwriteConfiguration from '../../../configuration/AppwriteConfiguration';
+import appwriteConfiguration from '../../../configuration/appwriteConfiguration';
 import Stripe from 'stripe';
 import stripeConfiguration from '../../../configuration/stripeConfiguration';
 import { Client } from 'appwrite';
@@ -14,7 +14,7 @@ export default async ({ req, res, log, error }) => {
     const stripe = new Stripe(stripeConfiguration.stripeKey)
 
     const client = new Client()
-        .setEndpoint('https://6658c497b201f0f3fdbd.appwrite.global/')
+        .setEndpoint(appwriteConfiguration.appwriteUrl)
         .setProject(appwriteConfiguration.appwriteProjectId)
         .setKey(appwriteConfiguration.appwriteFunctionCreatePaymentApiKey)
         .setSelfSigned(true);
@@ -22,7 +22,7 @@ export default async ({ req, res, log, error }) => {
     const amount = 1000; //req.payload.amount;
     const currency = 'usd'; //req.payload.currency || 'usd';
 
-    try {
+    //try {
         const paymentIntent = await stripe.paymentIntents.create({
             amount: amount,
             currency: currency,
@@ -30,11 +30,12 @@ export default async ({ req, res, log, error }) => {
         res.json({
             clientSecret: paymentIntent.client_secret,
         });
-    } catch (error) {
+    /*} catch (error) {
         res.json({
             error: error.message,
         });
     }
+    */
 
 
 

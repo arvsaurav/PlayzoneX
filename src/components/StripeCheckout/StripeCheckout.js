@@ -34,7 +34,7 @@ function StripeCheckout() {
             mode: 'no-cors',
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ amount: 1000, currency: 'usd' }),
+            body: JSON.stringify({ 'amount': 1000, 'currency': 'usd' }),
         });
         
         const { clientSecret } = await response.json();
