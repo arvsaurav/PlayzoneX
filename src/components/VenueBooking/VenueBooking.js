@@ -3,13 +3,13 @@ import { useNavigate, useParams } from 'react-router-dom';
 import venuesService from '../../services/VenuesService';
 import bookingService from '../../services/BookingService';
 import pricingService from '../../services/PricingService';
-import { Alert, Backdrop, Box, CircularProgress, FormControl, InputLabel, LinearProgress, MenuItem, Select, Skeleton } from '@mui/material';
+import { Alert, Backdrop, Box, Button, CircularProgress, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, FormControl, InputLabel, LinearProgress, MenuItem, Select, Skeleton } from '@mui/material';
 import dayjs from 'dayjs';
 import 'dayjs/locale/en-gb';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import './VenueBooking.css';
-import { StripeCheckoutWrapper } from '../StripeCheckout/StripeCheckout';
+import { useSelector } from 'react-redux';
 
 function VenueBooking() {
     const { venueid } = useParams();
@@ -30,7 +30,10 @@ function VenueBooking() {
     const [bookingDetails, setBookingDetails] = useState('');
     const [showAmountWindow, setShowAmountWindow] = useState(false);
     const [showBackdrop, setShowBackdrop] = useState(false);
+    const [unauthorisedUser, setUnauthorisedUser] = useState(false);
+    const [selectedSlotsNotAvailableWarning, setSelectedSlotsNotAvailableWarning] = useState(false);
     const navigate = useNavigate();
+    const selector = useSelector((state) => state.authentication);
 
     const handleSportChange = (event) => {
         setSport(event.target.value);
@@ -121,11 +124,21 @@ function VenueBooking() {
                 setConfirmBookingValidationFailedMessage('Something went wrong. Please retry your booking.');
                 return;
             }
+            // array of selected slot's id
+            const slotsId = [];
+            // array of selected slot's name
+            const slotsName = [];
+            selectedSlots.forEach((currentSlotArray) => {
+                slotsId.push(currentSlotArray.id);
+                slotsName.push(currentSlotArray.slot);
+            })
             const bookingDetail = {
                 'venueId': venueid,
                 'venueName': venueName,
-                'sport': sport,
+                'sportId': sport,
                 'sportName': sportNameArray[0].sport,
+                'slotsId': slotsId,
+                'slotsName': slotsName,
                 'date': date.format('DD-MM-YYYY'),
                 'slots': selectedSlots,
                 'amount': response
@@ -138,14 +151,40 @@ function VenueBooking() {
         }
     }
 
-    const handleProceedPaymentButton = () => {
-        // authenticate user and then proceed for payment
-        console.log('proceed payment button clicked.');
-        console.log(bookingDetails);
-        // test stripe flow
-        
-        navigate('/payment');
-        
+    const handleProceedPaymentButton = async () => {
+        if(selector.isUserAuthenticated) {
+            setShowBackdrop(true);
+            // check for current availability of selected slots
+            const currentlyAvailableSlots = await bookingService.getAvailableSlots(bookingDetails.venueId, bookingDetails.sportId, bookingDetails.date);
+            let areAllSelectedSlotsAvailable = true;
+            bookingDetails.slotsId.forEach((slotId) => {
+                let isCurrentSlotAvailable = false;
+                currentlyAvailableSlots.forEach((slotObj) => {
+                    if(slotObj.id === slotId) {
+                        isCurrentSlotAvailable = true;
+                    }
+                })
+                if(!isCurrentSlotAvailable) {
+                    areAllSelectedSlotsAvailable = false;
+                }
+            })
+            if(areAllSelectedSlotsAvailable) {
+                const response = await bookingService.createBooking(bookingDetails, selector.userData.email);
+                if(response) {
+                    navigate('/payment', { state: response });
+                }
+                else {
+                    setApiError(true);
+                }
+            }
+            else {
+                setSelectedSlotsNotAvailableWarning(true);
+            }
+            setShowBackdrop(false);
+        }
+        else {
+            setUnauthorisedUser(true);
+        }
     }
 
     useEffect(() => {
@@ -326,11 +365,31 @@ function VenueBooking() {
                         <div>Amount</div>
                         <div>INR {bookingDetails.amount}</div>
                     </div>
+                    {
+                        selectedSlotsNotAvailableWarning && <Alert severity="warning" sx={{mt: '10px', mb: '-15px'}}>Selected slots are not available at the moment.</Alert>
+                    }
                     <div id='amount-confirmation-window-proceed-payment-section'>
                         <button id='proceed-payment-button' onClick={handleProceedPaymentButton}>Proceed Payment</button>
                     </div>
                 </div>
             }
+            <Dialog
+                open={unauthorisedUser}
+                onClose={() => setUnauthorisedUser(false)}
+            >
+                <DialogTitle>
+                    {"Unauthorized User"}
+                </DialogTitle>
+                <DialogContent>
+                    <DialogContentText>
+                        Please login to continue...
+                    </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={() => setUnauthorisedUser(false)}>Cancel</Button>
+                    <Button onClick={() => {navigate('/login')}}>Login</Button>
+                </DialogActions>
+            </Dialog>
         </>
     )
 }

@@ -102,7 +102,7 @@ html {
 }
 
 #amount-confirmation-window-venue-name-section div:nth-child(2), #amount-confirmation-window-sport-section div:nth-child(2), #amount-confirmation-window-date-section div:nth-child(2), #amount-confirmation-window-slots-section div:nth-child(2), #amount-confirmation-window-amount-section div:nth-child(2) {
-    border: 1px solid gray;
+    border: 1px solid rgb(199, 199, 199);
     border-radius: 0.2rem;
     padding: 5px;
 }

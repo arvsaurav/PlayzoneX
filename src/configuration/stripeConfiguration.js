@@ -1,7 +1,6 @@
 const stripeConfiguration = {
-    stripeKey: String(process.env.REACT_APP_STRIPE_KEY),
-    stripeSignature: String(process.env.REACT_APP_STRIPE_SIGNATURE),
-    stripePublishableKey : String(process.env.REACT_APP_STRIPE_PUBLISHABLE_KEY)
+    stripePublishableKey: String(process.env.REACT_APP_STRIPE_PUBLISHABLE_KEY),
+    stripePaymentUrl: String(process.env.REACT_APP_STRIPE_PAYMENT_URL)
 }
 
 export default stripeConfiguration;

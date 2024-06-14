@@ -1,0 +1,62 @@
+.payment-form {
+    max-width: 400px;
+    min-width: 300px;
+    margin: 50px auto;
+    padding: 20px;
+    border: 1px solid #eaeaea;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.gateway-name {
+    color: #5469d4;
+    padding: 10px 10px 10px 0;
+    margin-bottom: 20px;
+    font-size: 26px;
+    font-weight: 600;
+}
+
+.card-element {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-bottom: 20px;
+}
+  
+.pay-button {
+    background-color: #6772e5;
+    color: #fff;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+  
+.pay-button:hover {
+    background-color: #5469d4;
+    transform: translateY(-2px);
+}
+  
+.pay-button:disabled {
+    background-color: #aab7c4;
+    cursor: not-allowed;
+}
+
+.processing-message {
+    margin-top: 10px;
+    font-size: 16px;
+}
+  
+.card-error {
+    color: #fa755a;
+    margin-top: 10px;
+    font-size: 16px;
+}
+  
+.payment-success {
+    color: #4caf50;
+    margin-top: 10px;
+    font-size: 16px;
+}

@@ -47,9 +47,10 @@ export class AuthenticationService {
 
     async login({email, password}) {
         try {
-            const userAccount = await this.account.createEmailSession(email, password);
+            await this.account.createEmailSession(email, password);
+            const userData = await this.getCurrentUser();
             return {
-                userAccount: userAccount,
+                userAccount: userData,
                 message: 'Login successful.'
             }
         }
@@ -77,7 +78,11 @@ export class AuthenticationService {
 
     async getCurrentUser() {
         try {
-            return await this.account.get();
+            const userData = await this.account.get();
+            return {
+                name: userData.name,
+                email: userData.email
+            }
         }
         catch {
             return null;
