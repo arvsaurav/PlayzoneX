@@ -10,11 +10,12 @@ import App from './App';
 import About from './components/About/About';
 import { Provider } from 'react-redux';
 import store from './store/store';
-import Account from './components/Account/Account';
 import Venues from './components/Venues/Venues';
 import Venue from './components/Venue/Venue';
 import VenueBooking from './components/VenueBooking/VenueBooking';
 import StripeCheckoutWrapper from './components/StripeCheckout/StripeCheckout';
+import Dashboard from './components/Dashboard/Dashboard';
+import ProtectedRoute from './components/ProtectedRoutes/ProtectedRoutes';
 
 const router = createBrowserRouter(
   	createRoutesFromElements(
@@ -23,11 +24,11 @@ const router = createBrowserRouter(
 			<Route path='about' element={<About />} />
 			<Route path='login' element={<Login />} />
 			<Route path='signup' element={<Signup />} />
-			<Route path='account' element={<Account />} />
 			<Route path='venues/:cityid' element={<Venues />} />
 			<Route path='venues/:cityid/:venueid' element={<Venue />} />
 			<Route path='booking/:venueid' element={<VenueBooking />} />
-			<Route path='payment' element={<StripeCheckoutWrapper />} />
+			<Route path='dashboard/:userid' element={ <ProtectedRoute element={<Dashboard />}/> }/>
+			<Route path='payment' element={ <ProtectedRoute element={<StripeCheckoutWrapper />}/> }/>
 		</Route>
   	)
 );

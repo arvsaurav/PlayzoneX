@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './Navbar.css';
 import logo from '../../images/PlayzoneX.jpg';
 import { NavLink, useNavigate } from 'react-router-dom';
@@ -18,7 +18,14 @@ function Navbar() {
     const selector = useSelector((state) => state.authentication);
     const [isOpen, setIsOpen] = useState(false);
     const [showBackdrop, setShowBackdrop] = useState(false);
+    const [userId, setUserId] = useState('');
 	const dispatch = useDispatch();
+
+    useEffect(() => {
+        if(selector.isUserAuthenticated) {
+            setUserId(selector.userData.id);
+        }
+    }, [selector]);
 
     const showDialogBox = () => {
 		setIsOpen(true);
@@ -50,7 +57,7 @@ function Navbar() {
                 <li><NavLink to="">HOME</NavLink></li>
                 <li><NavLink to="about">ABOUT</NavLink></li>
                 {
-                    selector.isUserAuthenticated && <li><NavLink to="account">MY ACCOUNT</NavLink></li>
+                    selector.isUserAuthenticated && <li><NavLink to={{pathname: `dashboard/${userId}`}}>DASHBOARD</NavLink></li>
                 }
                 {
                     !selector.isUserAuthenticated && <li><NavLink to="login">LOGIN / SIGNUP</NavLink></li>
@@ -74,13 +81,13 @@ function Navbar() {
                             <MenuItem onClick={() => {
                                 popupState.close();
                                 navigate('about');
-                            }}>About</MenuItem>
+                            }}>About Us</MenuItem>
                             {
                                 selector.isUserAuthenticated &&
                                     <MenuItem onClick={() => {
                                         popupState.close();
-                                        navigate('account');
-                                    }}>My Account</MenuItem>
+                                        navigate(`dashboard/${userId}`);
+                                    }}>Dashboard</MenuItem>
                             }
                             {
                                 !selector.isUserAuthenticated &&

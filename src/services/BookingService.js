@@ -126,6 +126,25 @@ export class BookingService {
             return null;
         }
     }
+
+    async getBookingStatus(bookingId) {
+        try {
+            const response = await this.database.getDocument(
+                configuration.appwriteDatabaseId,
+                configuration.appwriteBookingsCollectionId,
+                bookingId,
+                [
+                    Query.select(['Booking-Status'])
+                ]
+            )
+            return {
+                bookingStatus: response['Booking-Status']
+            }
+        }
+        catch {
+            return null;
+        }
+    }
 }
 
 const bookingService = new BookingService();

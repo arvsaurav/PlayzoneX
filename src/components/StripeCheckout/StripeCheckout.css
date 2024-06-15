@@ -1,6 +1,6 @@
 .payment-form {
     max-width: 400px;
-    min-width: 300px;
+    min-width: 280px;
     margin: 50px auto;
     padding: 20px;
     border: 1px solid #eaeaea;
@@ -59,4 +59,14 @@
     color: #4caf50;
     margin-top: 10px;
     font-size: 16px;
+}
+
+@media only screen and (max-width: 470px) {
+    .payment-form {
+        margin: 50px 15px 50px 15px;
+    }
+
+    .gateway-name {
+        font-size: 24px;
+    }
 }

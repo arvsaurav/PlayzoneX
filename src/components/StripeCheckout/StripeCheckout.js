@@ -6,6 +6,7 @@ import "./StripeCheckout.css";
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Alert, Backdrop, CircularProgress } from '@mui/material';
 import bookingService from '../../services/BookingService';
+import { useSelector } from 'react-redux';
 
 function StripeCheckoutWrapper() {
     const location = useLocation();
@@ -35,6 +36,8 @@ function StripeCheckout({bookingDetails}) {
     const [isTransactionTimedout, setIsTransactionTimedout] = useState(false);
     const [apiError, setApiError] = useState(false);
     const [invalidRedirect, setInvalidRedirect] = useState(false);
+    const [isAlreadyBooked, setIsAlreadyBooked] = useState(false);
+    const selector = useSelector((state) => state.authentication);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -80,8 +83,21 @@ function StripeCheckout({bookingDetails}) {
             }
             return;
         }
-        setProcessing(true);
         setShowBackdrop(true);
+        const status = await bookingService.getBookingStatus(bookingId);
+        if(!status) {
+            setApiError(true);
+            setShowBackdrop(false);
+            return;
+        }
+        if(status.bookingStatus === 'booked') {
+            setIsAlreadyBooked(true);
+            setTimeout(() => {
+                navigate(`/dashboard/${selector.userData.id}`);
+            }, 3000);
+            return;
+        }
+        setProcessing(true);
         const cardElement = elements.getElement(CardElement);
         const payload = {
             amount: payableAmount,
@@ -122,7 +138,7 @@ function StripeCheckout({bookingDetails}) {
                 const response = await bookingService.updateBooking(payload);
                 if(response) {
                     setTimeout(() => {
-                       navigate('/');
+                       navigate(`/dashboard/${selector.userData.id}`);
                     }, 3000);
                 }
                 else {
@@ -180,7 +196,14 @@ function StripeCheckout({bookingDetails}) {
                     success && 
                     <>
                         <Alert severity='success' sx={{mt: '10px'}}> Payment successful! </Alert>
-                        <div className='processing-message'> Redirecting to homepage... </div>
+                        <div className='processing-message'> Redirecting to dashboard... </div>
+                    </>
+                }
+                {
+                    isAlreadyBooked && 
+                    <>
+                        <Alert severity='warning' sx={{mt: '10px'}}> Already booked! </Alert>
+                        <div className='processing-message'> Redirecting to dashboard... </div>
                     </>
                 }
                 {

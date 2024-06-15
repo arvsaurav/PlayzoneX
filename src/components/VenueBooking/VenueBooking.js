@@ -3,7 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import venuesService from '../../services/VenuesService';
 import bookingService from '../../services/BookingService';
 import pricingService from '../../services/PricingService';
-import { Alert, Backdrop, Box, Button, CircularProgress, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, FormControl, InputLabel, LinearProgress, MenuItem, Select, Skeleton } from '@mui/material';
+import { Alert, Backdrop, Box, Button, CircularProgress, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, FormControl, InputLabel, LinearProgress, MenuItem, Select, Skeleton, Stack } from '@mui/material';
 import dayjs from 'dayjs';
 import 'dayjs/locale/en-gb';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
@@ -32,6 +32,7 @@ function VenueBooking() {
     const [showBackdrop, setShowBackdrop] = useState(false);
     const [unauthorisedUser, setUnauthorisedUser] = useState(false);
     const [selectedSlotsNotAvailableWarning, setSelectedSlotsNotAvailableWarning] = useState(false);
+    const [isConfirmBookingDisabled, setIsConfirmBookingDisabled] = useState(false);
     const navigate = useNavigate();
     const selector = useSelector((state) => state.authentication);
 
@@ -110,11 +111,7 @@ function VenueBooking() {
         else {
             setIsConfirmBookingValidationFailed(false);
             setConfirmBookingValidationFailedMessage('');
-            document.getElementById(event.target.id).disabled = true;
-            document.getElementById(event.target.id).style.backgroundColor = 'rgb(191, 191, 191)';
-            document.getElementById(event.target.id).style.color = 'rgb(102, 102, 102)';
-            document.getElementById(event.target.id).style.transform = 'scale(1.05)';
-            document.getElementById(event.target.id).style.cursor = 'not-allowed';
+            setIsConfirmBookingDisabled(true);
             const sportNameArray = allSports.filter((sportArray) => sportArray.id === sport);
             setShowBackdrop(true);
             const response = await pricingService.getPrice(venueid, sport, selectedSlots.length);
@@ -187,6 +184,23 @@ function VenueBooking() {
         }
     }
 
+    const handleCancelButton = () => {
+        selectedSlots.forEach((slotArray) => {
+            const btn = document.getElementById(slotArray.id)
+            btn.style.border = '1px solid gray';
+        })
+        setSelectedSlots([]);
+        setIsConfirmBookingDisabled(false);
+        setShowBackdrop(true);
+        setTimeout(() => {
+            document.getElementById('topmost-div').scrollIntoView();
+        }, 500);
+        setTimeout(() => {
+            setShowAmountWindow(false);
+            setShowBackdrop(false);
+        }, 1000);
+    }
+
     useEffect(() => {
         const getVenueNameAndLandmark = async () => {
             const response = await venuesService.getVenueNameAndLandmarkByVenueId(venueid);
@@ -219,7 +233,9 @@ function VenueBooking() {
             const response = await bookingService.getAvailableSlots(venueid, sport, date.format('DD-MM-YYYY'));
             if(response !== null) {
                 setAvailableSlots(response);
-                setIsSlotLoading(false);
+                setTimeout(() => {
+                    setIsSlotLoading(false);
+                }, 1500);
             }
             else {
                 setApiError(true);
@@ -246,6 +262,7 @@ function VenueBooking() {
             {
                 apiError && <Alert severity="error">Something went wrong.</Alert>
             }
+            <div id='topmost-div'></div>
             <div id='venue-booking-page-parent-div'>
                 <div id='venue-booking-page-heading-section'>
                     {
@@ -316,7 +333,11 @@ function VenueBooking() {
                             </Box>
                         }
                         {
-                            !isSlotLoading &&
+                            !isSlotLoading && availableSlots.length === 0 &&
+                            <div style={{padding: '10px'}}> No slots available. </div>
+                        }
+                        {
+                            !isSlotLoading && availableSlots.length !== 0 &&
                             availableSlots.map((slotArray, key) => {
                                 return (
                                     <button key={key} id={slotArray.id} onClick={() => handleSlotSelection(slotArray.id, slotArray.slot)}>{slotArray.slot}</button>
@@ -329,9 +350,11 @@ function VenueBooking() {
                     isConfirmBookingValidationFailed &&
                     <Alert sx={{marginBottom: '10px'}} severity="warning"> { confirmBookingValidationFailedMessage }</Alert>
                 }
-                <div id='venue-booking-page-confirm-booking-div'>
-                    <button id='venue-booking-page-confirm-booking-button' onClick={(event) => handleConfirmBookingButton(event)}>Confirm Booking</button>
-                </div>
+                <Stack direction="row" sx={{mb: '20px'}}>
+                        <Button variant="contained" color="success" disabled={isConfirmBookingDisabled} onClick={(event) => handleConfirmBookingButton(event)}>
+                            Confirm Booking
+                        </Button>
+                </Stack>
             </div>
             <div id='scroll-to-div'></div>
             {
@@ -355,7 +378,7 @@ function VenueBooking() {
                             {
                                 bookingDetails.slots.map((slotArray, key) => {
                                     return (
-                                        <div key={key} id='amount-confirmation-window-slots-section-slots'> {slotArray.slot} </div>
+                                        <div key={key} id='amount-confirmation-window-slots-section-slots' style={{border: '1px solid gray'}}> {slotArray.slot} </div>
                                     )
                                 })
                             }
@@ -368,9 +391,14 @@ function VenueBooking() {
                     {
                         selectedSlotsNotAvailableWarning && <Alert severity="warning" sx={{mt: '10px', mb: '-15px'}}>Selected slots are not available at the moment.</Alert>
                     }
-                    <div id='amount-confirmation-window-proceed-payment-section'>
-                        <button id='proceed-payment-button' onClick={handleProceedPaymentButton}>Proceed Payment</button>
-                    </div>
+                    <Stack direction="row" spacing={2} sx={{mt: '25px', mb: '20px'}}>
+                        <Button variant="contained" color="success" onClick={handleProceedPaymentButton}>
+                            Proceed Payment
+                        </Button>
+                        <Button variant="outlined" color="error" onClick={handleCancelButton}>
+                            Cancel
+                        </Button>
+                    </Stack>
                 </div>
             }
             <Dialog

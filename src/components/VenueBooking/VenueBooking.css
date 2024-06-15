@@ -73,26 +73,6 @@ html {
     border: 1px solid black;
 }
 
-#venue-booking-page-confirm-booking-div {
-    margin-bottom: 25px;
-}
-
-#venue-booking-page-confirm-booking-div button, #proceed-payment-button {
-    padding: 10px 15px 10px 15px;
-    font-size: 24px;
-    font-weight: 600;
-    width: 100%;
-    border-radius: 0.5rem;
-    border: none;
-    background-color: #27924C;
-    color: white;
-}   
-
-#venue-booking-page-confirm-booking-div button:hover, #proceed-payment-button:hover {
-    cursor: pointer;
-    transform: scale(1.05);
-}
-
 #amount-confirmation-window-venue-name-section, #amount-confirmation-window-sport-section, #amount-confirmation-window-date-section, #amount-confirmation-window-slots-section, #amount-confirmation-window-amount-section {
     width: 80%;
     display: grid;
@@ -131,10 +111,6 @@ html {
     border-radius: 0.2rem;
 }
 
-#amount-confirmation-window-proceed-payment-section {
-    margin: 25px 0 25px 0;
-}
-
 @media only screen and (max-width: 1100px) {
     #venue-booking-page-parent-div, #venue-booking-page-amount-confirmation-window {
         margin-top: 50px;
@@ -165,10 +141,6 @@ html {
 
     #amount-confirmation-window-sport-section, #amount-confirmation-window-date-section, #amount-confirmation-window-slots-section, #amount-confirmation-window-amount-section {
         margin-top: 15px;
-    }
-
-    #amount-confirmation-window-proceed-payment-section {
-        margin: 15px 0 25px 0;
     }
 
     #venue-booking-page-sports-section-div1, #venue-booking-page-date-section div:nth-child(1), #venue-booking-page-slots-section div:nth-child(1) {
