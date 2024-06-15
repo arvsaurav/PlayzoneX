@@ -193,7 +193,7 @@ function VenueBooking() {
         setIsConfirmBookingDisabled(false);
         setShowBackdrop(true);
         setTimeout(() => {
-            document.getElementById('topmost-div').scrollIntoView();
+            window.scrollTo(0, 0);
         }, 500);
         setTimeout(() => {
             setShowAmountWindow(false);
