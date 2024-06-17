@@ -1,0 +1,30 @@
+#dashboard-parent-div {
+    margin: 0 50px 0 50px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+#dashboard-display-name-div {
+    margin-top: 50px;
+    margin-bottom: 25px;
+    font-size: 28px;
+    font-weight: 600;
+    padding-bottom: 5px;
+    /* box-shadow: rgba(17, 17, 26, 0.1) 0px 1px 0px; */
+    border-bottom: 1px solid rgb(197, 197, 197);
+}
+
+@media only screen and (max-width: 600px) {
+    #dashboard-parent-div {
+        margin: 0 25px 0 25px;
+    }
+
+    #dashboard-display-name-div {
+        margin-top: 25px;
+        margin-bottom: 20px;
+        font-size: 24px;
+        font-weight: 400px;
+    }
+}

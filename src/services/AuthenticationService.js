@@ -18,7 +18,7 @@ export class AuthenticationService {
             if(userAccount) {
                 const loggedinUserAccount = await this.login({email, password});
                 return {
-                    loggedinUserAccount,
+                    userAccount: loggedinUserAccount.userAccount,
                     message: 'Account created successfully. Logging you in...'
                 }
             }

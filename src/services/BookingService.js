@@ -27,7 +27,8 @@ export class BookingService {
                     Query.equal('Venue-Id', venueId),
                     Query.equal('Sport', sport),
                     Query.equal('Date', date),
-                    Query.equal('Booking-Status', ['pending', 'booked'])
+                    Query.equal('Booking-Status', ['pending', 'booked']),
+                    Query.limit(2000)
                 ]
             )
             // currentlyOccupiedSlots = bookedSlots + pendingSlots
@@ -140,6 +141,25 @@ export class BookingService {
             return {
                 bookingStatus: response['Booking-Status']
             }
+        }
+        catch {
+            return null;
+        }
+    }
+
+    async getAllTransactionsOfUser(userEmail) {
+        try {
+            const response = await this.database.listDocuments(
+                configuration.appwriteDatabaseId,
+                configuration.appwriteBookingsCollectionId,
+                [
+                    Query.select(['Venue-Display-Name', 'Sport-Display-Name', 'Slots-Display-Name', 'Date', 'Booking-Amount', 'Booking-Status']),
+                    Query.equal('Booked-By', userEmail),
+                    Query.orderDesc('Date'),
+                    Query.limit(200)
+                ]
+            )
+            return response.documents;
         }
         catch {
             return null;
