@@ -288,6 +288,7 @@ function VenueBooking() {
                             <Select
                                 label='Sports'
                                 value={sport}
+                                disabled={isConfirmBookingDisabled}
                                 onChange={handleSportChange}
                             >
                                 {
@@ -308,6 +309,7 @@ function VenueBooking() {
                             sx={{ minWidth: 180, width: 300 }}
                             label="Date"
                             value={date}
+                            disabled={isConfirmBookingDisabled}
                             onChange={(newValue) => handleDateChange(newValue)}
                             minDate={dayjs().add(1, 'day')}
                             maxDate={dayjs().add(3, 'month')}
@@ -340,7 +342,7 @@ function VenueBooking() {
                             !isSlotLoading && availableSlots.length !== 0 &&
                             availableSlots.map((slotArray, key) => {
                                 return (
-                                    <button key={key} id={slotArray.id} onClick={() => handleSlotSelection(slotArray.id, slotArray.slot)}>{slotArray.slot}</button>
+                                    <button key={key} id={slotArray.id} disabled={isConfirmBookingDisabled} onClick={() => handleSlotSelection(slotArray.id, slotArray.slot)}>{slotArray.slot}</button>
                                 )
                             })
                         }

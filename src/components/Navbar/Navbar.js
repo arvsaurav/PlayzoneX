@@ -46,7 +46,7 @@ function Navbar() {
 			navigate('/');
 		}
 		catch {
-			console.log('something went wrong.');
+			alert("Something went wrong.");
 		}
 	}
 
